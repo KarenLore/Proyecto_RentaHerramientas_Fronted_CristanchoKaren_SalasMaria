@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles de Herramienta - ToolRent</title>
+    <link rel="stylesheet" href="../Styles/styles.css">
+    <link rel="stylesheet" href="../Styles/tool-details.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <img src="../images/Logo.png" alt="ToolRent Logo">
+                <h1>ToolRent</h1>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="catalog.html" class="active">Catálogo</a></li>
+                    <li><a href="about.html">Nosotros</a></li>
+                    <li><a href="contact.html">Contacto</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons" id="auth-buttons-container">
+                <a href="login.html" class="btn btn-outline">Iniciar Sesión</a>
+                <a href="register.html" class="btn btn-primary">Registrarse</a>
+            </div>
+            <div class="user-menu" id="user-menu-container" style="display: none;">
+                <button class="user-menu-button">
+                    <img src="img/user-avatar.png" alt="Usuario" class="user-avatar">
+                    <span class="user-name">Usuario</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="user-dropdown">
+                    <a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                    <a href="profile.html"><i class="fas fa-user"></i> Mi Perfil</a>
+                    <a href="reservations.html"><i class="fas fa-calendar-alt"></i> Mis Reservas</a>
+                    <a href="#" id="logout-button"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+                </div>
+            </div>
+            <button class="mobile-menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <div class="breadcrumb">
+        <div class="container">
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="catalog.html">Catálogo</a></li>
+                <li id="tool-category"><a href="#">Categoría</a></li>
+                <li id="tool-name">Nombre de la Herramienta</li>
+            </ul>
+        </div>
+    </div>
+
+    <main class="tool-details-container">
+        <div class="container">
+            <div class="loading-spinner" id="tool-loading">
+                <div class="spinner"></div>
+            </div>
+            <div class="tool-details" id="tool-details" style="display: none;">
+                <div class="tool-gallery">
+                    <div class="main-image">
+                        <img id="tool-main-image" src="/placeholder.svg" alt="Herramienta">
+                    </div>
+                    <div class="thumbnail-images" id="thumbnail-container">
+                        <!-- Las miniaturas se cargarán dinámicamente con JavaScript -->
+                    </div>
+                </div>
+                <div class="tool-info">
+                    <div class="tool-header">
+                        <h1 id="tool-title">Nombre de la Herramienta</h1>
+                        <div class="tool-category" id="tool-category-badge">Categoría</div>
+                    </div>
+                    <div class="tool-price">
+                        <span class="price-label">Precio por día:</span>
+                        <span class="price-amount" id="tool-price">$0.00</span>
+                    </div>
+                    <div class="tool-status">
+                        <span class="status-label">Estado:</span>
+                        <span class="status-badge" id="tool-status">Disponible</span>
+                    </div>
+                    <div class="tool-description">
+                        <h3>Descripción</h3>
+                        <p id="tool-description">Descripción de la herramienta...</p>
+                    </div>
+                    <div class="tool-provider">
+                        <h3>Proveedor</h3>
+                        <div class="provider-info">
+                            <img src="img/provider-avatar.png" alt="Proveedor" class="provider-avatar">
+                            <div>
+                                <h4 id="provider-name">Nombre del Proveedor</h4>
+                                <p id="provider-contact">Contacto del proveedor</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="reservation-form" id="reservation-form">
+                        <h3>Reservar Herramienta</h3>
+                        <form id="make-reservation-form">
+                            <div class="form-group">
+                                <label for="start-date">Fecha de Inicio</label>
+                                <div class="input-icon">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <input type="date" id="start-date" name="startDate" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="end-date">Fecha de Fin</label>
+                                <div class="input-icon">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <input type="date" id="end-date" name="endDate" required>
+                                </div>
+                            </div>
+                            <div class="reservation-summary">
+                                <div class="summary-item">
+                                    <span>Días:</span>
+                                    <span id="days-count">0</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span>Precio por día:</span>
+                                    <span id="day-price">$0.00</span>
+                                </div>
+                                <div class="summary-item total">
+                                    <span>Total:</span>
+                                    <span id="total-price">$0.00</span>
+                                </div>
+                            </div>
+                            <div class="form-error" id="reservation-error"></div>
+                            <button type="submit" class="btn btn-primary btn-block" id="reserve-button">Reservar Ahora</button>
+                        </form>
+                    </div>
+                    <div class="login-required" id="login-required" style="display: none;">
+                        <p>Debes iniciar sesión para reservar esta herramienta</p>
+                        <a href="login.html" class="btn btn-primary">Iniciar Sesión</a>
+                        <a href="register.html" class="btn btn-outline">Registrarse</a>
+                    </div>
+                </div>
+            </div>
+            <div class="similar-tools">
+                <h2>Herramientas Similares</h2>
+                <div class="tools-grid" id="similar-tools-container">
+                    <!-- Las herramientas similares se cargarán dinámicamente con JavaScript -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="img/logo.png" alt="ToolRent Logo">
+                    <h2>ToolRent</h2>
+                    <p>La mejor plataforma para renta de herramientas y equipos de construcción.</p>
+                </div>
+                <div class="footer-links">
+                    <h3>Enlaces Rápidos</h3>
+                    <ul>
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="catalog.html">Catálogo</a></li>
+                        <li><a href="about.html">Nosotros</a></li>
+                        <li><a href="contact.html">Contacto</a></li>
+                        <li><a href="terms.html">Términos y Condiciones</a></li>
+                        <li><a href="privacy.html">Política de Privacidad</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h3>Contacto</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> Av. Principal #123, Ciudad</p>
+                    <p><i class="fas fa-phone"></i> +123 456 7890</p>
+                    <p><i class="fas fa-envelope"></i> info@toolrent.com</p>
+                    <div class="social-media">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 ToolRent. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/tool-details.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

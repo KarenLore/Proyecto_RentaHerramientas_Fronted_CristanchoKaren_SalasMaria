@@ -1,0 +1,315 @@
+/* Breadcrumb */
+.breadcrumb {
+  background-color: var(--gray-100);
+  padding: 1rem 0;
+}
+
+.breadcrumb ul {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.breadcrumb ul li {
+  font-size: 0.875rem;
+  color: var(--gray-600);
+}
+
+.breadcrumb ul li:not(:last-child)::after {
+  content: "/";
+  margin: 0 0.5rem;
+  color: var(--gray-400);
+}
+
+.breadcrumb ul li:last-child {
+  color: var(--gray-800);
+  font-weight: 500;
+}
+
+/* Tool Details Container */
+.tool-details-container {
+  padding: 3rem 0;
+}
+
+.tool-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 4rem;
+}
+
+/* Tool Gallery */
+.tool-gallery {
+  position: sticky;
+  top: 100px;
+}
+
+.main-image {
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  margin-bottom: 1rem;
+  height: 400px;
+}
+
+.main-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thumbnail-images {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+
+.thumbnail {
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  cursor: pointer;
+  height: 80px;
+  border: 2px solid transparent;
+  transition: var(--transition);
+}
+
+.thumbnail.active {
+  border-color: var(--primary-color);
+}
+
+.thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Tool Info */
+.tool-header {
+  margin-bottom: 1.5rem;
+}
+
+.tool-header h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.tool-category {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.tool-price {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 1rem;
+}
+
+.price-label {
+  font-size: 1rem;
+  color: var(--gray-600);
+  margin-right: 0.5rem;
+}
+
+.price-amount {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.tool-status {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.status-label {
+  font-size: 1rem;
+  color: var(--gray-600);
+  margin-right: 0.5rem;
+}
+
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.status-badge.available {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: var(--success-color);
+}
+
+.status-badge.rented {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: var(--danger-color);
+}
+
+.status-badge.maintenance {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: var(--warning-color);
+}
+
+.tool-description {
+  margin-bottom: 2rem;
+}
+
+.tool-description h3 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.tool-description p {
+  color: var(--gray-600);
+  line-height: 1.6;
+}
+
+.tool-provider {
+  margin-bottom: 2rem;
+}
+
+.tool-provider h3 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.provider-info {
+  display: flex;
+  align-items: center;
+}
+
+.provider-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 1rem;
+}
+
+.provider-info h4 {
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.provider-info p {
+  color: var(--gray-600);
+  font-size: 0.875rem;
+  margin-bottom: 0;
+}
+
+/* Reservation Form */
+.reservation-form {
+  background-color: var(--gray-100);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+}
+
+.reservation-form h3 {
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.reservation-summary {
+  background-color: white;
+  border-radius: var(--border-radius);
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--gray-600);
+}
+
+.summary-item.total {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--gray-200);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--gray-900);
+}
+
+.login-required {
+  background-color: var(--gray-100);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.login-required p {
+  margin-bottom: 1.5rem;
+  color: var(--gray-600);
+}
+
+.login-required .btn {
+  margin: 0 0.5rem;
+}
+
+/* Similar Tools */
+.similar-tools {
+  margin-top: 3rem;
+}
+
+.similar-tools h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .tool-details {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .tool-gallery {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .tool-details-container {
+    padding: 2rem 0;
+  }
+
+  .main-image {
+    height: 300px;
+  }
+
+  .thumbnail {
+    height: 60px;
+  }
+
+  .tool-header h1 {
+    font-size: 1.75rem;
+  }
+
+  .price-amount {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .breadcrumb {
+    display: none;
+  }
+
+  .main-image {
+    height: 250px;
+  }
+
+  .thumbnail {
+    height: 50px;
+  }
+
+  .tool-header h1 {
+    font-size: 1.5rem;
+  }
+}
