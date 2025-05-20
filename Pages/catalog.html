@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Herramientas - ToolRent</title>
+    <link rel="stylesheet" href="../Styles/styles.css">
+    <link rel="stylesheet" href="../Styles/catalog.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <img src="../images/Logo.png" alt="ToolRent Logo">
+                <!-- <h1>ToolRent</h1> -->
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="catalog.html" class="active">Catálogo</a></li>
+                    <li><a href="about.html">Nosotros</a></li>
+                    <li><a href="contact.html">Contacto</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons" id="auth-buttons-container">
+                <a href="login.html" class="btn btn-outline">Iniciar Sesión</a>
+                <a href="register.html" class="btn btn-primary">Registrarse</a>
+            </div>
+            <div class="user-menu" id="user-menu-container" style="display: none;">
+                <button class="user-menu-button">
+                    <img src="img/user-avatar.png" alt="Usuario" class="user-avatar">
+                    <span class="user-name">Usuario</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="user-dropdown">
+                    <a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                    <a href="profile.html"><i class="fas fa-user"></i> Mi Perfil</a>
+                    <a href="reservations.html"><i class="fas fa-calendar-alt"></i> Mis Reservas</a>
+                    <a href="#" id="logout-button"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+                </div>
+            </div>
+            <button class="mobile-menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <section class="catalog-header">
+        <div class="container">
+            <h1>Catálogo de Herramientas</h1>
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="text" id="search-input" placeholder="Buscar herramientas...">
+                    <button id="search-button"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="catalog-container">
+        <div class="container">
+            <div class="catalog-layout">
+                <aside class="catalog-filters">
+                    <div class="filter-section">
+                        <h3>Categorías</h3>
+                        <div class="filter-options" id="category-filters">
+                            <div class="loading-spinner">
+                                <div class="spinner"></div>
+                            </div>
+                            <!-- Las categorías se cargarán dinámicamente con JavaScript -->
+                        </div>
+                    </div>
+                    <div class="filter-section">
+                        <h3>Precio por día</h3>
+                        <div class="price-range">
+                            <div class="range-inputs">
+                                <input type="range" id="min-price-range" min="0" max="100" value="0">
+                                <input type="range" id="max-price-range" min="0" max="100" value="100">
+                            </div>
+                            <div class="price-inputs">
+                                <div class="price-input">
+                                    <span>$</span>
+                                    <input type="number" id="min-price" min="0" value="0">
+                                </div>
+                                <div class="price-input">
+                                    <span>$</span>
+                                    <input type="number" id="max-price" min="0" value="100">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="filter-section">
+                        <h3>Disponibilidad</h3>
+                        <div class="filter-options">
+                            <div class="filter-option">
+                                <input type="checkbox" id="available-only" checked>
+                                <label for="available-only">Solo disponibles</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="filter-section">
+                        <h3>Ordenar por</h3>
+                        <div class="filter-options">
+                            <select id="sort-options">
+                                <option value="name-asc">Nombre (A-Z)</option>
+                                <option value="name-desc">Nombre (Z-A)</option>
+                                <option value="price-asc">Precio (Menor a Mayor)</option>
+                                <option value="price-desc">Precio (Mayor a Menor)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button id="apply-filters" class="btn btn-primary btn-block">Aplicar Filtros</button>
+                    <button id="reset-filters" class="btn btn-outline btn-block">Restablecer</button>
+                </aside>
+                <div class="catalog-content">
+                    <div class="catalog-header-bar">
+                        <div class="results-count">
+                            <span id="results-count">0</span> resultados encontrados
+                        </div>
+                        <div class="view-options">
+                            <button class="view-option active" data-view="grid">
+                                <i class="fas fa-th"></i>
+                            </button>
+                            <button class="view-option" data-view="list">
+                                <i class="fas fa-list"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="tools-grid" id="tools-container">
+                        <div class="loading-spinner">
+                            <div class="spinner"></div>
+                        </div>
+                        <!-- Las herramientas se cargarán dinámicamente con JavaScript -->
+                    </div>
+                    <div class="pagination" id="pagination-container">
+                        <!-- La paginación se generará dinámicamente con JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="img/logo.png" alt="ToolRent Logo">
+                    <h2>ToolRent</h2>
+                    <p>La mejor plataforma para renta de herramientas y equipos de construcción.</p>
+                </div>
+                <div class="footer-links">
+                    <h3>Enlaces Rápidos</h3>
+                    <ul>
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="catalog.html">Catálogo</a></li>
+                        <li><a href="about.html">Nosotros</a></li>
+                        <li><a href="contact.html">Contacto</a></li>
+                        <li><a href="terms.html">Términos y Condiciones</a></li>
+                        <li><a href="privacy.html">Política de Privacidad</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h3>Contacto</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> Av. Principal #123, Ciudad</p>
+                    <p><i class="fas fa-phone"></i> +123 456 7890</p>
+                    <p><i class="fas fa-envelope"></i> info@toolrent.com</p>
+                    <div class="social-media">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 ToolRent. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/catalog.js"></script>
+    <script src="../js/main.js"></script>
+</body>
+</html>
