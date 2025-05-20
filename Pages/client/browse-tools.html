@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar Herramientas | ToolRent</title>
+    <link rel="stylesheet" href="../../styles/styles.css">
+    <link rel="stylesheet" href="../../styles/dashboard.css">
+    <link rel="stylesheet" href="../../styles/tool-details.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-brand">
+                    <img src="../../assets/logo.png" alt="ToolRent Logo" class="logo">
+                    <h2>ToolRent</h2>
+                </div>
+                <button class="sidebar-close" id="sidebar-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="sidebar-user">
+                <div class="user-avatar">
+                    <img src="../../assets/avatar-placeholder.jpg" alt="Avatar" id="user-avatar">
+                </div>
+                <div class="user-info">
+                    <h3 id="user-name">Cargando...</h3>
+                    <p id="user-role">Cliente</p>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <h4>Principal</h4>
+                    <ul>
+                        <li>
+                            <a href="dashboard.html">
+                                <i class="fas fa-tachometer-alt"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="active">
+                            <a href="browse-tools.html">
+                                <i class="fas fa-search"></i>
+                                <span>Buscar Herramientas</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h4>Gestión</h4>
+                    <ul>
+                        <li>
+                            <a href="my-reservations.html">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span>Mis Reservas</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="my-payments.html">
+                                <i class="fas fa-money-bill-wave"></i>
+                                <span>Mis Pagos</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="my-returns.html">
+                                <i class="fas fa-undo"></i>
+                                <span>Mis Devoluciones</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <h4>Cuenta</h4>
+                    <ul>
+                        <li>
+                            <a href="profile.html">
+                                <i class="fas fa-user-cog"></i>
+                                <span>Mi Perfil</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="settings.html">
+                                <i class="fas fa-cog"></i>
+                                <span>Configuración</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="logout-btn" class="btn btn-outline btn-block">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Cerrar Sesión</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <div class="header-left">
+                    <button class="menu-toggle" id="menu-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1>Buscar Herramientas</h1>
+                </div>
+                <div class="header-right">
+                    <div class="search-bar">
+                        <input type="text" placeholder="Buscar herramientas..." id="header-search">
+                        <button id="header-search-btn"><i class="fas fa-search"></i></button>
+                    </div>
+                    <div class="header-actions">
+                        <div class="notification-bell" id="notification-bell">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-count" id="notification-count">0</span>
+                            <div class="notification-dropdown" id="notification-dropdown">
+                                <div class="notification-header">
+                                    <h3>Notificaciones</h3>
+                                    <button id="mark-all-read">Marcar todas como leídas</button>
+                                </div>
+                                <div class="notification-list" id="notification-list">
+                                    <!-- Las notificaciones se cargarán dinámicamente aquí -->
+                                </div>
+                                <div class="notification-footer">
+                                    <a href="notifications.html">Ver todas las notificaciones</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="user-menu" id="user-menu">
+                            <div class="user-menu-trigger">
+                                <img src="../../assets/avatar-placeholder.jpg" alt="Avatar" id="header-avatar">
+                                <span id="header-user-name">Cargando...</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="user-dropdown" id="user-dropdown">
+                                <ul>
+                                    <li>
+                                        <a href="profile.html">
+                                            <i class="fas fa-user"></i>
+                                            <span>Mi Perfil</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="settings.html">
+                                            <i class="fas fa-cog"></i>
+                                            <span>Configuración</span>
+                                        </a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li>
+                                        <a href="#" id="header-logout-btn">
+                                            <i class="fas fa-sign-out-alt"></i>
+                                            <span>Cerrar Sesión</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content">
+                <div class="tools-filters">
+                    <div class="filters-header">
+                        <h2>Filtros</h2>
+                        <button id="toggle-filters" class="btn btn-sm btn-outline">
+                            <i class="fas fa-filter"></i>
+                            <span>Mostrar/Ocultar Filtros</span>
+                        </button>
+                    </div>
+                    <div class="filters-body" id="filters-body">
+                        <div class="filter-group">
+                            <label for="category-filter">Categoría</label>
+                            <select id="category-filter" class="form-control">
+                                <option value="">Todas las categorías</option>
+                                <!-- Las categorías se cargarán dinámicamente aquí -->
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="price-filter">Precio máximo por día</label>
+                            <div class="range-slider">
+                                <input type="range" id="price-filter" min="0" max="500" step="10" value="500">
+                                <span id="price-value">$500</span>
+                            </div>
+                        </div>
+                        <div class="filter-group">
+                            <label for="availability-filter">Disponibilidad</label>
+                            <select id="availability-filter" class="form-control">
+                                <option value="">Todas</option>
+                                <option value="AVAILABLE" selected>Disponibles</option>
+                                <option value="RENTED">Alquiladas</option>
+                                <option value="UNDER_MAINTENANCE">En mantenimiento</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="rating-filter">Calificación mínima</label>
+                            <div class="rating-filter">
+                                <select id="rating-filter" class="form-control">
+                                    <option value="">Cualquier calificación</option>
+                                    <option value="5">5 estrellas</option>
+                                    <option value="4">4+ estrellas</option>
+                                    <option value="3">3+ estrellas</option>
+                                    <option value="2">2+ estrellas</option>
+                                    <option value="1">1+ estrellas</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="filter-group">
+                            <label for="sort-filter">Ordenar por</label>
+                            <select id="sort-filter" class="form-control">
+                                <option value="name,asc">Nombre (A-Z)</option>
+                                <option value="name,desc">Nombre (Z-A)</option>
+                                <option value="rentalPrice,asc">Precio (menor a mayor)</option>
+                                <option value="rentalPrice,desc">Precio (mayor a menor)</option>
+                                <option value="rating,desc">Mejor calificación</option>
+                                <option value="createdAt,desc">Más recientes</option>
+                            </select>
+                        </div>
+                        <div class="filter-actions">
+                            <button id="apply-filters" class="btn btn-primary">Aplicar Filtros</button>
+                            <button id="reset-filters" class="btn btn-outline">Restablecer</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tools-results">
+                    <div class="results-header">
+                        <h2>Resultados</h2>
+                        <div class="results-count" id="results-count">Mostrando 0 herramientas</div>
+                    </div>
+                    <div class="tools-grid" id="tools-grid">
+                        <!-- Las herramientas se cargarán dinámicamente aquí -->
+                        <div class="loader" id="tools-loader"></div>
+                    </div>
+                    <div class="pagination" id="pagination">
+                        <button id="prev-page" class="btn btn-outline" disabled>
+                            <i class="fas fa-chevron-left"></i>
+                            <span>Anterior</span>
+                        </button>
+                        <div class="page-info" id="page-info">Página 1 de 1</div>
+                        <button id="next-page" class="btn btn-outline" disabled>
+                            <span>Siguiente</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="dashboard-footer">
+                <p>&copy; 2023 ToolRent. Todos los derechos reservados.</p>
+                <div class="footer-links">
+                    <a href="#">Términos y Condiciones</a>
+                    <a href="#">Política de Privacidad</a>
+                    <a href="#">Ayuda</a>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Tool Detail Modal -->
+    <div class="modal" id="tool-modal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h2 id="modal-tool-name">Detalles de la Herramienta</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="tool-detail">
+                    <div class="tool-gallery">
+                        <div class="tool-main-image">
+                            <img id="modal-tool-image" src="../../assets/tool-placeholder.jpg" alt="Herramienta">
+                        </div>
+                        <div class="tool-thumbnails" id="tool-thumbnails">
+                            <!-- Las miniaturas se cargarán dinámicamente aquí -->
+                        </div>
+                    </div>
+                    <div class="tool-info">
+                        <div class="tool-header">
+                            <div class="tool-category" id="modal-tool-category">Categoría</div>
+                            <div class="tool-rating">
+                                <div class="stars" id="modal-tool-rating">
+                                    <!-- Las estrellas se generarán dinámicamente -->
+                                </div>
+                                <span id="modal-tool-rating-count">(0 reseñas)</span>
+                            </div>
+                        </div>
+                        <div class="tool-price">
+                            <span id="modal-tool-price">$0.00</span> / día
+                        </div>
+                        <div class="tool-status">
+                            <span class="status-badge" id="modal-tool-status-badge">Disponible</span>
+                        </div>
+                        <div class="tool-description">
+                            <h3>Descripción</h3>
+                            <p id="modal-tool-description">Cargando descripción...</p>
+                        </div>
+                        <div class="tool-provider">
+                            <h3>Proveedor</h3>
+                            <div class="provider-info">
+                                <img src="../../assets/avatar-placeholder.jpg" alt="Proveedor" id="modal-provider-avatar">
+                                <div>
+                                    <h4 id="modal-provider-name">Nombre del Proveedor</h4>
+                                    <div class="provider-rating">
+                                        <div class="stars" id="modal-provider-rating">
+                                            <!-- Las estrellas se generarán dinámicamente -->
+                                        </div>
+                                        <span id="modal-provider-rating-count">(0 reseñas)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tool-specs">
+                            <h3>Especificaciones</h3>
+                            <ul id="modal-tool-specs">
+                                <!-- Las especificaciones se cargarán dinámicamente aquí -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="reservation-form" id="reservation-form">
+                    <h3>Hacer Reserva</h3>
+                    <form id="make-reservation-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="reservation-start">Fecha de inicio</label>
+                                <div class="input-icon">
+                                    <i class="fas fa-calendar"></i>
+                                    <input type="date" id="reservation-start" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="reservation-end">Fecha de fin</label>
+                                <div class="input-icon">
+                                    <i class="fas fa-calendar"></i>
+                                    <input type="date" id="reservation-end" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="reservation-summary">
+                            <div class="summary-item">
+                                <span>Precio por día:</span>
+                                <span id="summary-price-per-day">$0.00</span>
+                            </div>
+                            <div class="summary-item">
+                                <span>Días:</span>
+                                <span id="summary-days">0</span>
+                            </div>
+                            <div class="summary-item">
+                                <span>Subtotal:</span>
+                                <span id="summary-subtotal">$0.00</span>
+                            </div>
+                            <div class="summary-item">
+                                <span>Impuestos (19%):</span>
+                                <span id="summary-tax">$0.00</span>
+                            </div>
+                            <div class="summary-item total">
+                                <span>Total:</span>
+                                <span id="summary-total">$0.00</span>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary btn-block" id="reserve-btn">Reservar Ahora</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/config.js"></script>
+    <script src="../../js/api.js"></script>
+    <script src="../../js/auth.js"></script>
+    <script src="../../js/client/browse-tools.js"></script>
+</body>
+</html>
