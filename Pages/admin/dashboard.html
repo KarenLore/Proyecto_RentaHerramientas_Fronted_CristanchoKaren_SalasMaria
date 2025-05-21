@@ -1,0 +1,130 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración | Alquiler de Herramientas</title>
+    <link rel="stylesheet" href="../../styles/styles.css">
+    <link rel="stylesheet" href="../../styles/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+         &lt; <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="../../assets/logo.png" alt="Logo" class="logo">
+                <h2>Panel Admin</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active"><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="users.html"><i class="fas fa-users"></i> Usuarios</a></li>
+                    <li><a href="tools.html"><i class="fas fa-tools"></i> Herramientas</a></li>
+                    <li><a href="reservations.html"><i class="fas fa-calendar-alt"></i> Reservas</a></li>
+                    <li><a href="payments.html"><i class="fas fa-money-bill-wave"></i> Pagos</a></li>
+                    <li><a href="reports.html"><i class="fas fa-chart-bar"></i> Informes</a></li>
+                    <li><a href="categories.html"><i class="fas fa-tags"></i> Categorías</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="logout-btn" class="btn btn-danger"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
+            </div>
+        </aside>
+
+        &lt;<!-- Main Content -->
+        <main class="main-content">
+            <header class="content-header">
+                <h1>Dashboard</h1>
+                <div class="user-info">
+                    <span id="user-name">Admin</span>
+                    <div class="notification-bell">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-count">0</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Usuarios</h3>
+                        <p id="total-users">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Proveedores</h3>
+                        <p id="total-providers">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Clientes</h3>
+                        <p id="total-clients">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Herramientas</h3>
+                        <p id="total-tools">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Reservas</h3>
+                        <p id="total-reservations">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Pagos</h3>
+                        <p id="total-payments">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-charts">
+                <div class="chart-container">
+                    <h3>Reservas por Mes</h3>
+                    <canvas id="reservations-chart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>Ingresos por Mes</h3>
+                    <canvas id="revenue-chart"></canvas>
+                </div>
+            </div>
+
+            <div class="recent-activity">
+                <h3>Actividad Reciente</h3>
+                <div class="activity-list" id="activity-list">
+                    &lt;!-- Activity items will be loaded here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../../js/config.js"></script>
+    <script src="../../js/api.js"></script>
+    <script src="../../js/auth.js"></script>
+    <script src="../../js/admin/dashboard.js"></script>
+</body>
+</html>

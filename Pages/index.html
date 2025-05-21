@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rentify Tools - Plataforma de Renta de Herramientas</title>
+    <link rel="stylesheet" href="../Styles/styles.css">
+    <link rel="stylesheet" href="../Styles/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <img src="../images/Logo.png" alt="ToolRent Logo">
+                <!-- <h1>ToolRent</h1> -->
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html" class="active">Inicio</a></li>
+                    <li><a href="catalog.html">Catálogo</a></li>
+                    <li><a href="about.html">Nosotros</a></li>
+                    <li><a href="contact.html">Contacto</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons">
+                <a href="login.html" class="btn btn-outline">Iniciar Sesión</a>
+                <a href="register.html" class="btn btn-primary">Registrarse</a>
+            </div>
+            <button class="mobile-menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Renta de Herramientas y Equipos de Construcción</h1>
+                <p>Encuentra las herramientas que necesitas para tu proyecto. Renta fácil, rápido y seguro.</p>
+                <div class="hero-buttons">
+                    <a href="catalog.html" class="btn btn-primary">Ver Catálogo</a>
+                    <a href="#how-it-works" class="btn btn-secondary">Cómo Funciona</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="../images/herramientas.png" alt="Herramientas de construcción">
+            </div>
+        </div>
+    </section>
+
+    <section class="categories">
+        <div class="container">
+            <h2 class="section-title">Categorías Populares</h2>
+            <div class="categories-grid">
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-hammer"></i>
+                    </div>
+                    <h3>Herramientas Eléctricas</h3>
+                    <p>Taladros, sierras, lijadoras y más</p>
+                    <a href="catalog.html?category=1" class="category-link">Ver herramientas</a>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-wrench"></i>
+                    </div>
+                    <h3>Herramientas Manuales</h3>
+                    <p>Llaves, destornilladores, alicates</p>
+                    <a href="catalog.html?category=2" class="category-link">Ver herramientas</a>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-truck-pickup"></i>
+                    </div>
+                    <h3>Equipos de Construcción</h3>
+                    <p>Mezcladoras, compactadoras, andamios</p>
+                    <a href="catalog.html?category=3" class="category-link">Ver equipos</a>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3>Equipos de Jardinería</h3>
+                    <p>Cortadoras, podadoras, sopladores</p>
+                    <a href="catalog.html?category=4" class="category-link">Ver equipos</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="featured-tools">
+        <div class="container">
+            <h2 class="section-title">Herramientas Destacadas</h2>
+            <div class="tools-grid" id="featured-tools-container">
+                <!-- Las herramientas se cargarán dinámicamente con JavaScript -->
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <h2 class="section-title">Cómo Funciona</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>Busca</h3>
+                    <p>Explora nuestro catálogo y encuentra las herramientas que necesitas</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h3>Reserva</h3>
+                    <p>Selecciona las fechas y realiza tu reserva en línea</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-icon">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <h3>Paga</h3>
+                    <p>Realiza el pago de forma segura a través de nuestra plataforma</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h3>Utiliza</h3>
+                    <p>Recibe tus herramientas y comienza tu proyecto</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <div class="container">
+            <h2 class="section-title">Lo que dicen nuestros clientes</h2>
+            <div class="testimonials-slider">
+                <div class="testimonial">
+                    <div class="testimonial-content">
+                        <p>"Excelente servicio, las herramientas estaban en perfecto estado y la entrega fue puntual. Definitivamente volveré a utilizar Rentify Tools para mis próximos proyectos."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="../images/contratista.png" alt="Cliente">
+                        <div>
+                            <h4>Carlos Rodríguez</h4>
+                            <p>Contratista</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial">
+                    <div class="testimonial-content">
+                        <p>"La plataforma es muy fácil de usar y el proceso de reserva es rápido. Las herramientas son de alta calidad y el precio es muy competitivo."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="../images/arquitecta.jpg" alt="Cliente">
+                        <div>
+                            <h4>María González</h4>
+                            <p>Arquitecta</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial">
+                    <div class="testimonial-content">
+                        <p>"Gracias a Rentify Tools, he podido gestionar mis necesidades de manera más eficiente y aumentar mis ingresos. La plataforma es muy fácil de usar y el soporte siempre está disponible para ayudarme."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="../images/PARTICULARES.png" alt="Cliente">
+                        <div>
+                            <h4>Karla Gomez</h4>
+                            <p>Particulares</p>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+            <div class="testimonial-controls">
+                <button class="prev-testimonial"><i class="fas fa-chevron-left"></i></button>
+                <button class="next-testimonial"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- <section class="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>¿Listo para comenzar tu proyecto?</h2>
+                <p>Regístrate ahora y encuentra las herramientas que necesitas</p>
+                <a href="register.html" class="btn btn-primary">Crear Cuenta</a>
+            </div>
+        </div>
+    </section> -->
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="../images/Logo.png" alt="ToolRent Logo">
+                    <h2>Rentify Tools</h2>
+                    <p>La mejor plataforma para renta de herramientas y equipos de construcción.</p>
+                </div>
+                <!-- <div class="footer-links">
+                    <h3>Enlaces Rápidos</h3>
+                    <ul>
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="catalog.html">Catálogo</a></li>
+                        <li><a href="about.html">Nosotros</a></li>
+                        <li><a href="contact.html">Contacto</a></li>
+                        <li><a href="terms.html">Términos y Condiciones</a></li>
+                        <li><a href="privacy.html">Política de Privacidad</a></li>
+                    </ul>
+                </div> -->
+                <div class="footer-contact">
+                    <h3>Contacto</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> Av. Principal #103, Tibú</p>
+                    <p><i class="fas fa-phone"></i> +57 323 2483 683</p>
+                    <p><i class="fas fa-envelope"></i> rentifytools@.com</p>
+                    <div class="social-media">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <!-- <div class="footer-newsletter">
+                    <h3>Suscríbete a nuestro boletín</h3>
+                    <p>Recibe noticias y ofertas especiales</p>
+                    <form id="newsletter-form">
+                        <input type="email" placeholder="Tu correo electrónico" required>
+                        <button type="submit" class="btn btn-primary">Suscribirse</button>
+                    </form>
+                </div> -->
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Rentify Tools. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/enviroment.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/home.js"></script>
+</body>
+</html>

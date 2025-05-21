@@ -1,0 +1,132 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Proveedor | Alquiler de Herramientas</title>
+    <link rel="stylesheet" href="../../styles/styles.css">
+    <link rel="stylesheet" href="../../styles/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+         &lt; <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="../../assets/logo.png" alt="Logo" class="logo">
+                <h2>Panel Proveedor</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active"><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="my-tools.html"><i class="fas fa-tools"></i> Mis Herramientas</a></li>
+                    <li><a href="add-tool.html"><i class="fas fa-plus-circle"></i> Añadir Herramienta</a></li>
+                    <li><a href="reservations.html"><i class="fas fa-calendar-alt"></i> Reservas</a></li>
+                    <li><a href="returns.html"><i class="fas fa-undo"></i> Devoluciones</a></li>
+                    <li><a href="income.html"><i class="fas fa-money-bill-wave"></i> Ingresos</a></li>
+                    <li><a href="profile.html"><i class="fas fa-user-cog"></i> Mi Perfil</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="logout-btn" class="btn btn-danger"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
+            </div>
+        </aside>
+
+        &lt;<!-- Main Content -->
+        <main class="main-content">
+            <header class="content-header">
+                <h1>Dashboard de Proveedor</h1>
+                <div class="user-info">
+                    <span id="user-name">Proveedor</span>
+                    <div class="notification-bell">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-count">0</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Mis Herramientas</h3>
+                        <p id="total-tools">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Reservas Activas</h3>
+                        <p id="active-reservations">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Ingresos Totales</h3>
+                        <p id="total-income">$0.00</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Calificación</h3>
+                        <p id="rating">0.0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-charts">
+                <div class="chart-container">
+                    <h3>Reservas por Mes</h3>
+                    <canvas id="reservations-chart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>Ingresos por Mes</h3>
+                    <canvas id="income-chart"></canvas>
+                </div>
+            </div>
+
+            <div class="recent-reservations">
+                <h3>Reservas Recientes</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Herramienta</th>
+                            <th>Cliente</th>
+                            <th>Fecha Inicio</th>
+                            <th>Fecha Fin</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recent-reservations-table">
+                        &lt;!-- Reservations will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="notifications-panel">
+                <h3>Notificaciones</h3>
+                <div class="notifications-list" id="notifications-list">
+                    &lt;!-- Notifications will be loaded here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../../js/config.js"></script>
+    <script src="../../js/api.js"></script>
+    <script src="../../js/auth.js"></script>
+    <script src="../../js/provider/dashboard.js"></script>
+</body>
+</html>
