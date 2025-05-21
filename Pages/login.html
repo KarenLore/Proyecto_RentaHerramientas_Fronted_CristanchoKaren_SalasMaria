@@ -43,7 +43,7 @@
                 <h2>Iniciar Sesión</h2>
                 <p>Accede a tu cuenta para gestionar tus reservas y pagos</p>
             </div>
-            <form id="login-form" class="auth-form">
+            <form id="loginForm" class="auth-form">
                 <div class="form-group">
                     <label for="email">Correo Electrónico</label>
                     <div class="input-icon">
@@ -56,7 +56,7 @@
                     <div class="input-icon">
                         <i class="fas fa-lock"></i>
                         <input type="password" id="password" name="password" placeholder="Ingresa tu contraseña" required>
-                        <button type="button" class="toggle-password">
+                        <button type="button" class="toggle-password" id="togglePassword">
                             <i class="fas fa-eye"></i>
                         </button>
                     </div>
@@ -114,9 +114,7 @@
             </div>
         </div>
     </footer>
+    <script type="module" src="../js/login.js"></script>
 
-    <script src="../js/enviroment.js"></script>
-    <script src="../js/main.js"></script>
-    <script src="../js/auth.js"></script>
 </body>
 </html>
