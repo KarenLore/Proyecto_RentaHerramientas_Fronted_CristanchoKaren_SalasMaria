@@ -1,5 +1,5 @@
 // URL de la API
-export const API_URL = 'http://localhost:8081';
+export const API_URL = 'http://localhost:8080';
 
 // Categorías de herramientas con iconos
 export const TOOL_CATEGORIES = [

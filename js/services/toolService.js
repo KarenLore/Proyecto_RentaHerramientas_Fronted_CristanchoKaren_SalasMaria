@@ -2,49 +2,43 @@ import { API_URL } from '../config.js';
 import { AuthService } from './authService.js';
 import { showNotification } from '../utils/ui.js';
 
-// ToolService for handling tool-related API calls
 export class ToolService {
-  // Get all tools
+  static async handleResponse(response) {
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  }
+
   static async getAllTools() {
     try {
       const response = await fetch(`${API_URL}/api/tools`);
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch tools');
-      }
-      
-      return await response.json();
+      return await this.handleResponse(response);
     } catch (error) {
       console.error('Error fetching tools:', error);
-      showNotification('Failed to fetch tools', 'error');
+      showNotification(error.message || 'Failed to fetch tools', 'error');
       return [];
     }
   }
-  
-  // Get tool by ID
+
   static async getToolById(id) {
     try {
       const response = await fetch(`${API_URL}/api/tools/${id}`);
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch tool details');
-      }
-      
-      return await response.json();
+      return await this.handleResponse(response);
     } catch (error) {
       console.error(`Error fetching tool ${id}:`, error);
-      showNotification('Failed to fetch tool details', 'error');
+      showNotification(error.message || 'Failed to fetch tool details', 'error');
       return null;
     }
   }
-  
-  // Create new tool (for suppliers/admins)
+
   static async createTool(toolData) {
     if (!AuthService.isAuthenticated()) {
       showNotification('You must be logged in to add tools', 'error');
       return null;
     }
-    
+
     try {
       const response = await fetch(`${API_URL}/api/tools`, {
         method: 'POST',
@@ -54,17 +48,12 @@ export class ToolService {
         },
         body: JSON.stringify(toolData)
       });
-      
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to create tool');
-      }
-      
+      const result = await this.handleResponse(response);
       showNotification('Tool created successfully', 'success');
-      return await response.json();
+      return result;
     } catch (error) {
       console.error('Error creating tool:', error);
-      showNotification(error.message, 'error');
+      showNotification(error.message || 'Failed to create tool', 'error');
       return null;
     }
   }

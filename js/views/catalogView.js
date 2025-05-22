@@ -1,6 +1,8 @@
 import { createElement } from '../utils/ui.js';
 import { ToolService } from '../services/toolService.js';
-import { TOOL_CATEGORIES, TOOL_IMAGES } from '../config.js';
+import { CategoryService } from '../services/categoryService.js';
+import { TOOL_IMAGES } from '../config.js';
+import { showNotification } from '../utils/ui.js';
 
 // Create and return the catalog view
 export const catalogView = () => {
@@ -40,9 +42,7 @@ export const catalogView = () => {
         onChange: () => handleFilters()
       }, [
         createElement('option', { value: '' }, 'All Categories'),
-        ...TOOL_CATEGORIES.map(category => 
-          createElement('option', { value: category.id }, category.name)
-        )
+        // Categories will be populated dynamically
       ])
     ]),
     createElement('div', { className: 'filter-group' }, [
@@ -150,15 +150,37 @@ export const catalogView = () => {
 };
 
 // Initialize catalog view
-const initCatalogView = () => {
+const initCatalogView = async () => {
   // Get URL params for initial filters
   const urlParams = new URLSearchParams(window.location.search);
   const categoryParam = urlParams.get('category');
   const searchParam = urlParams.get('search');
   
-  // Set initial filter values from URL
-  if (categoryParam) {
-    document.getElementById('category').value = categoryParam;
+  // Load categories from API
+  try {
+    const categories = await CategoryService.getAllCategories();
+    const categorySelect = document.getElementById('category');
+    
+    // Clear existing options (keeping "All Categories")
+    while (categorySelect.options.length > 1) {
+      categorySelect.remove(1);
+    }
+    
+    // Add fetched categories
+    categories.forEach(category => {
+      const option = document.createElement('option');
+      option.value = category.id;
+      option.textContent = category.name;
+      categorySelect.appendChild(option);
+    });
+    
+    // Set initial filter values from URL
+    if (categoryParam) {
+      categorySelect.value = categoryParam;
+    }
+  } catch (error) {
+    console.error('Error loading categories:', error);
+    showNotification('Failed to load categories', 'error');
   }
   
   if (searchParam) {
@@ -185,108 +207,22 @@ const loadTools = async () => {
   if (!toolResults) return;
   
   try {
-    // In a real app, this would be an API call with filters
-    // For demo, we'll create mock tools
-    const mockTools = [
-      {
-        id: 1,
-        name: 'Professional Power Drill',
-        description: 'High-performance cordless drill with variable speed and torque settings.',
-        model: 'XR2000',
-        brand: 'PowerMaster',
-        costPerDay: 24.99,
-        availableQuantity: 5,
-        category: 'Power Tools',
-        supplier: 'ToolPro Rentals'
-      },
-      {
-        id: 2,
-        name: 'Circular Saw',
-        description: 'Precision circular saw with laser guide and dust collection system.',
-        model: 'CS1500',
-        brand: 'CutRight',
-        costPerDay: 29.99,
-        availableQuantity: 3,
-        category: 'Power Tools',
-        supplier: 'Construction Equipment Co.'
-      },
-      {
-        id: 3,
-        name: 'Electric Lawn Mower',
-        description: 'Eco-friendly electric lawn mower with adjustable cutting height.',
-        model: 'Green 3000',
-        brand: 'EcoMow',
-        costPerDay: 35.50,
-        availableQuantity: 2,
-        category: 'Garden Tools',
-        supplier: 'Green Garden Rentals'
-      },
-      {
-        id: 4,
-        name: 'Professional Ladder',
-        description: 'Extendable aluminum ladder with safety lock system, reaches up to 20 feet.',
-        model: 'SafeClimb',
-        brand: 'HeightMaster',
-        costPerDay: 18.75,
-        availableQuantity: 8,
-        category: 'Ladders & Scaffolding',
-        supplier: 'Construction Equipment Co.'
-      },
-      {
-        id: 5,
-        name: 'Pressure Washer',
-        description: 'Heavy-duty pressure washer perfect for cleaning driveways, decks, and exteriors.',
-        model: 'HydroForce 2500',
-        brand: 'CleanMax',
-        costPerDay: 42.00,
-        availableQuantity: 4,
-        category: 'Cleaning Equipment',
-        supplier: 'ToolPro Rentals'
-      },
-      {
-        id: 6,
-        name: 'Hammer Drill',
-        description: 'Professional hammer drill for concrete and masonry work.',
-        model: 'HD750',
-        brand: 'ConstructPro',
-        costPerDay: 28.50,
-        availableQuantity: 6,
-        category: 'Power Tools',
-        supplier: 'Construction Equipment Co.'
-      },
-      {
-        id: 7,
-        name: 'Pipe Wrench Set',
-        description: 'Complete set of professional pipe wrenches for plumbing work.',
-        model: 'PW-Pro',
-        brand: 'PipeMaster',
-        costPerDay: 15.25,
-        availableQuantity: 10,
-        category: 'Plumbing Tools',
-        supplier: 'Plumbing Pros'
-      },
-      {
-        id: 8,
-        name: 'Electric Chainsaw',
-        description: 'Powerful electric chainsaw for cutting trees and large branches.',
-        model: 'EC2000',
-        brand: 'ForestCut',
-        costPerDay: 32.75,
-        availableQuantity: 3,
-        category: 'Garden Tools',
-        supplier: 'Green Garden Rentals'
-      }
-    ];
+    // Get tools from API
+    let tools = await ToolService.getAllTools();
     
     // Apply filters
-    let filteredTools = [...mockTools];
+    let filteredTools = [...tools];
     const categoryFilter = document.getElementById('category').value;
     const searchFilter = document.getElementById('search').value.toLowerCase();
     const sortFilter = document.getElementById('sort').value;
     
     // Category filter
     if (categoryFilter) {
-      const categoryName = TOOL_CATEGORIES.find(c => c.id.toString() === categoryFilter)?.name || '';
+      // Get category name from select element
+      const categorySelect = document.getElementById('category');
+      const selectedOption = categorySelect.options[categorySelect.selectedIndex];
+      const categoryName = selectedOption.textContent;
+      
       filteredTools = filteredTools.filter(tool => tool.category === categoryName);
     }
     
@@ -295,8 +231,8 @@ const loadTools = async () => {
       filteredTools = filteredTools.filter(tool => 
         tool.name.toLowerCase().includes(searchFilter) || 
         tool.description.toLowerCase().includes(searchFilter) ||
-        tool.brand.toLowerCase().includes(searchFilter) ||
-        tool.model.toLowerCase().includes(searchFilter)
+        (tool.brand && tool.brand.toLowerCase().includes(searchFilter)) ||
+        (tool.model && tool.model.toLowerCase().includes(searchFilter))
       );
     }
     
@@ -355,7 +291,8 @@ const loadTools = async () => {
           createElement('p', { className: 'card-text' }, tool.description),
           createElement('div', { className: 'flex items-center mb-4' }, [
             createElement('span', { className: 'badge badge-primary mr-2' }, tool.category),
-            createElement('span', { className: 'text-sm text-gray' }, `${tool.brand} ${tool.model}`)
+            tool.brand && tool.model && 
+              createElement('span', { className: 'text-sm text-gray' }, `${tool.brand} ${tool.model}`)
           ])
         ]),
         createElement('div', { className: 'card-footer' }, [
@@ -496,17 +433,18 @@ const renderPagination = (totalItems) => {
 };
 
 // Change page
+let currentPage = 1;
+
 const changePage = (pageNumber) => {
-  // In a real app, this would load the new page of results
-  // For demo, we'll just update the active page
+  currentPage = pageNumber;
   const paginationItems = document.querySelectorAll('.pagination-item');
   const prevBtn = paginationItems[0];
   const nextBtn = paginationItems[paginationItems.length - 1];
-  const totalPages = paginationItems.length - 2; // Subtract prev and next buttons
+  const totalPages = paginationItems.length - 2;
   
   // Update active page
   paginationItems.forEach((item, index) => {
-    if (index === 0 || index === paginationItems.length - 1) return; // Skip prev/next buttons
+    if (index === 0 || index === paginationItems.length - 1) return;
     
     if (index === pageNumber) {
       item.classList.add('active');
@@ -521,4 +459,7 @@ const changePage = (pageNumber) => {
   
   // Scroll to top of results
   document.getElementById('tool-results').scrollIntoView({ behavior: 'smooth' });
+  
+  // In a real implementation, you would load the new page of results here
+  // loadTools(pageNumber);
 };
