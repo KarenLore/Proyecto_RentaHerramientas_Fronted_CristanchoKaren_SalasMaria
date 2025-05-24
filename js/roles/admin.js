@@ -1,33 +1,42 @@
 import { apiService } from "../services/apiService.js"
-import { createStatCard } from "../components/cards.js"
-import { createTable } from "../components/tables.js"
 
 // === Vista del Dashboard ===
 async function createAdminDashboardView() {
+  console.log("📊 Creando vista dashboard de admin...")
+
   try {
     const [users, tools, reservations] = await Promise.all([
-      apiService.getUsers(),
-      apiService.getTools(),
-      apiService.getReservations(),
+      apiService.getUsers().catch(() => []),
+      apiService.getTools().catch(() => []),
+      apiService.getReservations().catch(() => []),
     ])
+
+    console.log(
+      "📈 Datos cargados - Usuarios:",
+      users.length,
+      "Herramientas:",
+      tools.length,
+      "Reservas:",
+      reservations.length,
+    )
 
     const recentReservations = reservations
       .slice(0, 5)
       .map((reservation) => [
-        reservation.id,
+        reservation.id || "N/A",
         reservation.client?.name || "Cliente no disponible",
         reservation.tool?.name || "Herramienta no disponible",
         reservation.startDate || "No especificada",
         reservation.endDate || "No especificada",
-        `<span class="status status-${reservation.status?.toLowerCase() || "unknown"}">${reservation.status || "Desconocido"}</span>`,
+        `<span class="status-badge status-${(reservation.status || "unknown").toLowerCase()}">${reservation.status || "Desconocido"}</span>`,
         `$${Number.parseFloat(reservation.totalCost || 0).toFixed(2)}`,
         '<i class="fas fa-eye action-icon"></i> <i class="fas fa-edit action-icon"></i>',
       ])
 
     return `
-      <div class="view admin-view admin-dashboard-view">
+      <div class="view admin-view admin-dashboard-view dashboard-view">
         <div class="dashboard-header">
-          <div class="dashboard-title">Panel de Administrador</div>
+          <h1 class="dashboard-title">Panel de Administrador</h1>
           <div class="action-buttons">
             <button class="btn btn-secondary">
               <i class="fas fa-download"></i>
@@ -39,40 +48,147 @@ async function createAdminDashboardView() {
             </button>
           </div>
         </div>
-        <div class="stats-container">
-          ${createStatCard("Usuarios Totales", users.length.toString(), "fas fa-users", "#6366f1", { type: "positive", icon: "fas fa-arrow-up", text: "12% desde el mes pasado" })}
-          ${createStatCard("Herramientas Registradas", tools.length.toString(), "fas fa-tools", "#10b981", { type: "positive", icon: "fas fa-arrow-up", text: "8% desde el mes pasado" })}
-          ${createStatCard("Reservas Activas", reservations.length.toString(), "fas fa-clipboard-list", "#f59e0b", { type: "positive", icon: "fas fa-arrow-up", text: "5% desde el mes pasado" })}
-          ${createStatCard("Ingresos Totales", "$12,450", "fas fa-dollar-sign", "#ef4444", { type: "positive", icon: "fas fa-arrow-up", text: "15% desde el mes pasado" })}
+        
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <div>
+                <div class="stat-card-title">Usuarios Totales</div>
+                <div class="stat-card-value">${users.length}</div>
+              </div>
+              <div class="stat-card-icon" style="background-color: #6366f1;">
+                <i class="fas fa-users"></i>
+              </div>
+            </div>
+            <div class="stat-card-change positive">
+              <i class="fas fa-arrow-up"></i>
+              <span>12% desde el mes pasado</span>
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <div>
+                <div class="stat-card-title">Herramientas</div>
+                <div class="stat-card-value">${tools.length}</div>
+              </div>
+              <div class="stat-card-icon" style="background-color: #10b981;">
+                <i class="fas fa-tools"></i>
+              </div>
+            </div>
+            <div class="stat-card-change positive">
+              <i class="fas fa-arrow-up"></i>
+              <span>8% desde el mes pasado</span>
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <div>
+                <div class="stat-card-title">Reservas</div>
+                <div class="stat-card-value">${reservations.length}</div>
+              </div>
+              <div class="stat-card-icon" style="background-color: #f59e0b;">
+                <i class="fas fa-clipboard-list"></i>
+              </div>
+            </div>
+            <div class="stat-card-change positive">
+              <i class="fas fa-arrow-up"></i>
+              <span>5% desde el mes pasado</span>
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <div>
+                <div class="stat-card-title">Ingresos</div>
+                <div class="stat-card-value">$12,450</div>
+              </div>
+              <div class="stat-card-icon" style="background-color: #ef4444;">
+                <i class="fas fa-dollar-sign"></i>
+              </div>
+            </div>
+            <div class="stat-card-change positive">
+              <i class="fas fa-arrow-up"></i>
+              <span>15% desde el mes pasado</span>
+            </div>
+          </div>
         </div>
-        ${createTable("Reservas Recientes", ["ID", "Cliente", "Herramienta", "Fecha Inicio", "Fecha Fin", "Estado", "Monto", "Acciones"], recentReservations)}
+
+        <div class="table-container">
+          <div class="table-header">
+            <h3 class="table-title">Reservas Recientes</h3>
+            <div class="table-actions">
+              <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Buscar...">
+              </div>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Cliente</th>
+                  <th>Herramienta</th>
+                  <th>Fecha Inicio</th>
+                  <th>Fecha Fin</th>
+                  <th>Estado</th>
+                  <th>Monto</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${recentReservations
+                  .map(
+                    (row) => `
+                  <tr>
+                    ${row.map((cell) => `<td>${cell}</td>`).join("")}
+                  </tr>
+                `,
+                  )
+                  .join("")}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     `
   } catch (error) {
-    console.error("Error fetching dashboard data:", error)
-    return `<div class="error-message">Error al cargar los datos del dashboard.</div>`
+    console.error("❌ Error creando vista dashboard admin:", error)
+    return `
+      <div class="view admin-view admin-dashboard-view dashboard-view">
+        <div class="error-message">
+          <h3>Error al cargar el dashboard</h3>
+          <p>Detalles: ${error.message}</p>
+        </div>
+      </div>
+    `
   }
 }
 
 // === Vista de Usuarios ===
 async function createAdminUsersView() {
+  console.log("👥 Creando vista de usuarios...")
+
   try {
-    const users = await apiService.getUsers()
+    const users = await apiService.getUsers().catch(() => [])
 
     const userData = users.map((user) => [
-      user.id,
+      user.id || "N/A",
       user.name || "Nombre no disponible",
       user.email || "Email no disponible",
       user.role || "Rol no definido",
-      new Date().toLocaleDateString(), // Since backend doesn't have registration date in DTO
-      `<span class="status status-${user.active ? "available" : "maintenance"}">${user.active ? "Activo" : "Inactivo"}</span>`,
+      new Date().toLocaleDateString(),
+      `<span class="status-badge status-${user.active ? "available" : "maintenance"}">${user.active ? "Activo" : "Inactivo"}</span>`,
       '<i class="fas fa-eye action-icon"></i> <i class="fas fa-edit action-icon"></i> <i class="fas fa-trash action-icon"></i>',
     ])
 
     return `
-      <div class="view admin-view admin-users-view hidden">
+      <div class="view admin-view admin-users-view users-view hidden">
         <div class="dashboard-header">
-          <div class="dashboard-title">Gestión de Usuarios</div>
+          <h1 class="dashboard-title">Gestión de Usuarios</h1>
           <div class="action-buttons">
             <button class="btn btn-secondary">
               <i class="fas fa-filter"></i>
@@ -84,39 +200,118 @@ async function createAdminUsersView() {
             </button>
           </div>
         </div>
-        ${createTable("Usuarios Registrados", ["ID", "Nombre", "Email", "Rol", "Fecha Registro", "Estado", "Acciones"], userData)}
+        
+        <div class="table-container">
+          <div class="table-header">
+            <h3 class="table-title">Usuarios Registrados</h3>
+          </div>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Email</th>
+                  <th>Rol</th>
+                  <th>Fecha Registro</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${userData
+                  .map(
+                    (row) => `
+                  <tr>
+                    ${row.map((cell) => `<td>${cell}</td>`).join("")}
+                  </tr>
+                `,
+                  )
+                  .join("")}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     `
   } catch (error) {
-    console.error("Error fetching users:", error)
-    return `<div class="error-message">Error al cargar la lista de usuarios.</div>`
+    console.error("❌ Error creando vista usuarios:", error)
+    return `<div class="view admin-view admin-users-view users-view hidden">Error al cargar usuarios</div>`
+  }
+}
+
+// === Vista de Herramientas ===
+async function createAdminToolsView() {
+  console.log("🔧 Creando vista de herramientas...")
+
+  try {
+    const tools = await apiService.getTools().catch(() => [])
+
+    return `
+      <div class="view admin-view admin-tools-view tools-view hidden">
+        <div class="dashboard-header">
+          <h1 class="dashboard-title">Gestión de Herramientas</h1>
+          <div class="action-buttons">
+            <button class="btn btn-secondary">
+              <i class="fas fa-filter"></i>
+              <span>Filtrar</span>
+            </button>
+            <button class="btn btn-primary" id="addToolBtn">
+              <i class="fas fa-plus"></i>
+              <span>Nueva Herramienta</span>
+            </button>
+          </div>
+        </div>
+        
+        <div class="tools-grid">
+          ${tools
+            .slice(0, 8)
+            .map(
+              (tool) => `
+            <div class="tool-card">
+              <div class="tool-image">
+                <img src="/placeholder.svg?height=200&width=320" alt="${tool.name || "Herramienta"}" />
+                <div class="tool-status ${tool.active ? "status-available" : "status-maintenance"}">
+                  ${tool.active ? "Disponible" : "Mantenimiento"}
+                </div>
+              </div>
+              <div class="tool-info">
+                <h3 class="tool-name">${tool.name || "Sin nombre"}</h3>
+                <p class="tool-category">${tool.category?.name || "Sin categoría"}</p>
+                <p class="tool-price">$${Number.parseFloat(tool.costPerDay || 0).toFixed(2)} / día</p>
+                <div class="tool-actions">
+                  <button class="btn btn-secondary btn-sm">
+                    <i class="fas fa-edit"></i> Editar
+                  </button>
+                  <button class="btn btn-primary btn-sm">
+                    <i class="fas fa-eye"></i> Ver
+                  </button>
+                </div>
+              </div>
+            </div>
+          `,
+            )
+            .join("")}
+        </div>
+      </div>
+    `
+  } catch (error) {
+    console.error("❌ Error creando vista herramientas:", error)
+    return `<div class="view admin-view admin-tools-view tools-view hidden">Error al cargar herramientas</div>`
   }
 }
 
 // === Vista de Reservas ===
 async function createAdminReservationsView() {
-  try {
-    const [reservations, suppliers] = await Promise.all([apiService.getReservations(), apiService.getSuppliers()])
+  console.log("📋 Creando vista de reservas...")
 
-    const reservationData = reservations.map((reservation) => {
-      const supplier = suppliers.find((s) => s.id === reservation.supplierId) || { name: "Proveedor no encontrado" }
-      return [
-        reservation.id,
-        reservation.client?.name || "Cliente no disponible",
-        supplier.name,
-        reservation.tool?.name || "Herramienta no disponible",
-        reservation.startDate || "No especificada",
-        reservation.endDate || "No especificada",
-        `<span class="status status-${reservation.status?.toLowerCase() || "unknown"}">${reservation.status || "Desconocido"}</span>`,
-        `$${Number.parseFloat(reservation.totalCost || 0).toFixed(2)}`,
-        '<i class="fas fa-eye action-icon"></i> <i class="fas fa-edit action-icon"></i>',
-      ]
-    })
+  try {
+    const reservations = await apiService.getReservations().catch(() => [])
 
     return `
-      <div class="view admin-view admin-reservations-view hidden">
+      <div class="view admin-view admin-reservations-view reservations-view hidden">
         <div class="dashboard-header">
-          <div class="dashboard-title">Historial de Reservas</div>
+          <h1 class="dashboard-title">Gestión de Reservas</h1>
           <div class="action-buttons">
             <button class="btn btn-secondary">
               <i class="fas fa-filter"></i>
@@ -128,74 +323,115 @@ async function createAdminReservationsView() {
             </button>
           </div>
         </div>
-        ${createTable("Todas las Reservas", ["ID", "Cliente", "Proveedor", "Herramienta", "Fecha Inicio", "Fecha Fin", "Estado", "Monto", "Acciones"], reservationData)}
+        
+        <div class="table-container">
+          <div class="table-header">
+            <h3 class="table-title">Todas las Reservas</h3>
+          </div>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Cliente</th>
+                  <th>Herramienta</th>
+                  <th>Fecha Inicio</th>
+                  <th>Fecha Fin</th>
+                  <th>Estado</th>
+                  <th>Monto</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${reservations
+                  .map(
+                    (reservation) => `
+                  <tr>
+                    <td>${reservation.id || "N/A"}</td>
+                    <td>${reservation.client?.name || "Cliente no disponible"}</td>
+                    <td>${reservation.tool?.name || "Herramienta no disponible"}</td>
+                    <td>${reservation.startDate || "No especificada"}</td>
+                    <td>${reservation.endDate || "No especificada"}</td>
+                    <td><span class="status-badge status-${(reservation.status || "unknown").toLowerCase()}">${reservation.status || "Desconocido"}</span></td>
+                    <td>$${Number.parseFloat(reservation.totalCost || 0).toFixed(2)}</td>
+                    <td>
+                      <i class="fas fa-eye action-icon"></i>
+                      <i class="fas fa-edit action-icon"></i>
+                    </td>
+                  </tr>
+                `,
+                  )
+                  .join("")}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     `
   } catch (error) {
-    console.error("Error fetching reservations:", error)
-    return `<div class="error-message">Error al cargar la lista de reservas.</div>`
+    console.error("❌ Error creando vista reservas:", error)
+    return `<div class="view admin-view admin-reservations-view reservations-view hidden">Error al cargar reservas</div>`
   }
 }
 
 // === Vista de Reportes ===
 async function createAdminReportsView() {
-  try {
-    const [tools, suppliers, reservations] = await Promise.all([
-      apiService.getTools(),
-      apiService.getSuppliers(),
-      apiService.getReservations(),
-    ])
+  console.log("📊 Creando vista de reportes...")
 
-    // Agrupar por categoría
-    const toolsByCategory = {}
-    if (Array.isArray(tools)) {
-      tools.forEach((tool) => {
-        const category = tool.category || "Sin categoría"
-        toolsByCategory[category] = (toolsByCategory[category] || 0) + 1
-      })
-    }
-
-    // Proveedor más activo
-    const activeSupplier = (Array.isArray(suppliers) ? suppliers : []).sort((a, b) => {
-      const countA = (Array.isArray(reservations) ? reservations.filter((r) => r.supplierId === a.id) : []).length
-      const countB = (Array.isArray(reservations) ? reservations.filter((r) => r.supplierId === b.id) : []).length
-      return countB - countA
-    })[0]
-
-    return `
-      <div class="view admin-view admin-reports-view hidden">
-        <div class="dashboard-header">
-          <div class="dashboard-title">Reportes y Estadísticas</div>
-          <div class="action-buttons">
-            <button class="btn btn-secondary"><i class="fas fa-calendar"></i><span>Periodo</span></button>
-            <button class="btn btn-primary"><i class="fas fa-download"></i><span>Exportar</span></button>
-          </div>
-        </div>
-        <div class="stats-container">
-          ${createStatCard("Categoría Más Popular", Object.keys(toolsByCategory)[0] || "Ninguna", "fas fa-tools", "#10b981", { text: "Mayor cantidad de herramientas" })}
-          ${createStatCard("Proveedor Más Activo", activeSupplier?.name || "Ninguno", "fas fa-store", "#6366f1", { text: "Mayor cantidad de reservas" })}
-          ${createStatCard("Total Categorías", Object.keys(toolsByCategory).length.toString(), "fas fa-tags", "#f59e0b", { text: "Categorías registradas" })}
-          ${createStatCard("Promedio Reservas/Día", "8.5", "fas fa-chart-line", "#ef4444", { text: "Últimos 30 días" })}
+  return `
+    <div class="view admin-view admin-reports-view reports-view hidden">
+      <div class="dashboard-header">
+        <h1 class="dashboard-title">Reportes y Estadísticas</h1>
+        <div class="action-buttons">
+          <button class="btn btn-secondary">
+            <i class="fas fa-calendar"></i>
+            <span>Periodo</span>
+          </button>
+          <button class="btn btn-primary">
+            <i class="fas fa-download"></i>
+            <span>Exportar</span>
+          </button>
         </div>
       </div>
-    `
-  } catch (error) {
-    console.error("Error fetching reports:", error)
-    return `<div class="error-message">Error al cargar reportes.</div>`
-  }
+      
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-card-header">
+            <div>
+              <div class="stat-card-title">Categoría Más Popular</div>
+              <div class="stat-card-value">Herramientas Eléctricas</div>
+            </div>
+            <div class="stat-card-icon" style="background-color: #10b981;">
+              <i class="fas fa-tools"></i>
+            </div>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-card-header">
+            <div>
+              <div class="stat-card-title">Proveedor Más Activo</div>
+              <div class="stat-card-value">ToolMaster Inc.</div>
+            </div>
+            <div class="stat-card-icon" style="background-color: #6366f1;">
+              <i class="fas fa-store"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `
 }
 
-// === Función principal para crear todas las vistas ===
+// === Función principal ===
 export async function createAdminViews() {
-  try {
-    const dashboard = await createAdminDashboardView()
-    const users = await createAdminUsersView()
-    const reservations = await createAdminReservationsView()
-    const reports = await createAdminReportsView()
+  console.log("🏗️ Creando todas las vistas de administrador...")
 
-    return `${dashboard}${users}${reservations}${reports}`
-  } catch (error) {
-    console.error("Error creating admin views:", error)
-    return `<div class="error-message">Error al cargar las vistas de administrador.</div>`
-  }
+  const dashboard = await createAdminDashboardView()
+  const users = await createAdminUsersView()
+  const tools = await createAdminToolsView()
+  const reservations = await createAdminReservationsView()
+  const reports = await createAdminReportsView()
+
+  return `${dashboard}${users}${tools}${reservations}${reports}`
 }
