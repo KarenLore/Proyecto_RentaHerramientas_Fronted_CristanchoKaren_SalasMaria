@@ -19,23 +19,35 @@ const appState = {
 
 // Initialize the application
 async function initApp() {
+  console.log("🚀 Inicializando aplicación...")
+
   // Check authentication
   if (!localStorage.getItem("isAuthenticated")) {
+    console.log("❌ No autenticado, redirigiendo a login")
     window.location.href = "login.html"
     return
   }
 
-  // Load user data
-  await loadUserData()
+  try {
+    // Load user data
+    await loadUserData()
+    console.log("✅ Datos de usuario cargados:", appState.user)
 
-  // Setup UI
-  setupUI()
+    // Setup UI
+    setupUI()
+    console.log("✅ UI configurada")
 
-  // Render content based on role
-  await renderContent()
+    // Render content based on role
+    await renderContent()
+    console.log("✅ Contenido renderizado")
 
-  // Setup event listeners
-  setupEventListeners()
+    // Setup event listeners
+    setupEventListeners()
+    console.log("✅ Event listeners configurados")
+  } catch (error) {
+    console.error("❌ Error inicializando app:", error)
+    showError("Error al cargar la aplicación. Por favor, recarga la página.")
+  }
 }
 
 // Load user data from localStorage and API
@@ -43,98 +55,102 @@ async function loadUserData() {
   const userEmail = localStorage.getItem("userEmail")
   const userRole = localStorage.getItem("userRole")
 
+  console.log("📧 Email del usuario:", userEmail)
+  console.log("👤 Rol del usuario:", userRole)
+
   if (!userEmail || !userRole) {
+    console.log("❌ Faltan datos de usuario, cerrando sesión")
     logout()
     return
   }
 
-  appState.currentRole = userRole
+  appState.currentRole = userRole.toUpperCase()
 
-  try {
-    // Try to get user details from API
-    const userData = await apiService.getUserByEmail(userEmail)
-
-    if (userData) {
-      appState.user = {
-        name: userData.name || "User",
-        email: userData.email,
-        initials: getInitials(userData.name || "User"),
-        role: userRole,
-      }
-    } else {
-      // Fallback if API fails
-      appState.user = {
-        name: "User",
-        email: userEmail,
-        initials: "US",
-        role: userRole,
-      }
-    }
-  } catch (error) {
-    console.error("Error loading user data:", error)
-    // Fallback if API fails
-    appState.user = {
-      name: "User",
-      email: userEmail,
-      initials: "US",
-      role: userRole,
-    }
+  // Fallback user data
+  appState.user = {
+    name: userEmail.split("@")[0] || "Usuario",
+    email: userEmail,
+    initials: getInitials(userEmail.split("@")[0] || "Usuario"),
+    role: userRole.toLowerCase(),
   }
+
+  console.log("✅ Estado del usuario actualizado:", appState.user)
 }
 
 // Setup UI elements
 function setupUI() {
-  // Update user info
-  document.getElementById("userName").textContent = appState.user.name
-  document.getElementById("userRole").textContent = appState.user.role
-  document.getElementById("userInitials").textContent = appState.user.initials
+  console.log("🎨 Configurando UI...")
 
-  document.getElementById("headerUserName").textContent = appState.user.name
-  document.getElementById("headerUserInitials").textContent = appState.user.initials
+  // Update user info
+  const userNameEl = document.getElementById("userName")
+  const userRoleEl = document.getElementById("userRole")
+  const userInitialsEl = document.getElementById("userInitials")
+  const headerUserNameEl = document.getElementById("headerUserName")
+  const headerUserInitialsEl = document.getElementById("headerUserInitials")
+
+  if (userNameEl) userNameEl.textContent = appState.user.name
+  if (userRoleEl) userRoleEl.textContent = getRoleDisplayName(appState.user.role)
+  if (userInitialsEl) userInitialsEl.textContent = appState.user.initials
+  if (headerUserNameEl) headerUserNameEl.textContent = appState.user.name
+  if (headerUserInitialsEl) headerUserInitialsEl.textContent = appState.user.initials
 
   // Setup navigation menu based on role
   setupNavMenu()
 }
 
+// Get display name for role
+function getRoleDisplayName(role) {
+  const roleNames = {
+    admin: "Administrador",
+    supplier: "Proveedor",
+    client: "Cliente",
+  }
+  return roleNames[role.toLowerCase()] || role
+}
+
 // Setup navigation menu based on user role
 function setupNavMenu() {
-  const navMenu = document.getElementById("navMenu")
-  let menuItems = []
+  console.log("📋 Configurando menú para rol:", appState.currentRole)
 
-  // Common menu items
-  const commonItems = [{ id: "dashboard", icon: "fas fa-tachometer-alt", text: "Dashboard" }]
+  const navMenu = document.getElementById("navMenu")
+  if (!navMenu) {
+    console.error("❌ No se encontró el elemento navMenu")
+    return
+  }
+
+  let menuItems = []
 
   // Role-specific menu items
   if (appState.currentRole === "ADMIN") {
     menuItems = [
-      ...commonItems,
-      { id: "users", icon: "fas fa-users", text: "Users" },
-      { id: "tools", icon: "fas fa-tools", text: "Tools" },
-      { id: "rentals", icon: "fas fa-clipboard-list", text: "Rentals" },
-      { id: "reports", icon: "fas fa-chart-bar", text: "Reports" },
+      { id: "dashboard", icon: "fas fa-tachometer-alt", text: "Dashboard" },
+      { id: "users", icon: "fas fa-users", text: "Usuarios" },
+      { id: "tools", icon: "fas fa-tools", text: "Herramientas" },
+      { id: "reservations", icon: "fas fa-clipboard-list", text: "Reservas" },
+      { id: "reports", icon: "fas fa-chart-bar", text: "Reportes" },
     ]
   } else if (appState.currentRole === "SUPPLIER") {
     menuItems = [
-      ...commonItems,
-      { id: "tools", icon: "fas fa-tools", text: "My Tools" },
-      { id: "rentals", icon: "fas fa-clipboard-list", text: "Rental Requests" },
-      { id: "billing", icon: "fas fa-file-invoice-dollar", text: "Billing" },
+      { id: "dashboard", icon: "fas fa-tachometer-alt", text: "Dashboard" },
+      { id: "tools", icon: "fas fa-tools", text: "Mis Herramientas" },
+      { id: "reservations", icon: "fas fa-clipboard-list", text: "Reservas" },
+      { id: "billing", icon: "fas fa-file-invoice-dollar", text: "Facturación" },
     ]
   } else if (appState.currentRole === "CLIENT") {
     menuItems = [
-      ...commonItems,
-      { id: "explore", icon: "fas fa-search", text: "Explore Tools" },
-      { id: "rentals", icon: "fas fa-clipboard-list", text: "My Rentals" },
-      { id: "payments", icon: "fas fa-credit-card", text: "Payments" },
+      { id: "dashboard", icon: "fas fa-tachometer-alt", text: "Dashboard" },
+      { id: "explore", icon: "fas fa-search", text: "Explorar" },
+      { id: "reservations", icon: "fas fa-clipboard-list", text: "Mis Reservas" },
+      { id: "payments", icon: "fas fa-credit-card", text: "Pagos" },
     ]
   }
 
   // Generate menu HTML
   navMenu.innerHTML = menuItems
     .map(
-      (item) => `
+      (item, index) => `
     <li>
-      <a href="#" class="nav-item ${item.id === "dashboard" ? "active" : ""}" data-view="${item.id}">
+      <a href="#" class="nav-item ${index === 0 ? "active" : ""}" data-view="${item.id}">
         <i class="${item.icon}"></i>
         <span class="nav-item-text">${item.text}</span>
       </a>
@@ -142,18 +158,27 @@ function setupNavMenu() {
   `,
     )
     .join("")
+
+  console.log("✅ Menú configurado con", menuItems.length, "elementos")
 }
 
 // Render content based on user role
 async function renderContent() {
+  console.log("🎨 Renderizando contenido para rol:", appState.currentRole)
+
   const contentArea = document.getElementById("contentArea")
   const pageTitle = document.getElementById("pageTitle")
+
+  if (!contentArea) {
+    console.error("❌ No se encontró el elemento contentArea")
+    return
+  }
 
   // Show loading state
   contentArea.innerHTML = `
     <div class="loading">
       <div class="spinner"></div>
-      <p>Loading content...</p>
+      <p>Cargando contenido...</p>
     </div>
   `
 
@@ -162,35 +187,71 @@ async function renderContent() {
 
     // Generate content based on role
     if (appState.currentRole === "ADMIN") {
+      console.log("📊 Cargando vistas de administrador...")
       content = await createAdminViews()
-      pageTitle.textContent = "Admin Dashboard"
+      if (pageTitle) pageTitle.textContent = "Panel de Administrador"
     } else if (appState.currentRole === "SUPPLIER") {
+      console.log("🏪 Cargando vistas de proveedor...")
       content = await createProviderViews()
-      pageTitle.textContent = "Supplier Dashboard"
+      if (pageTitle) pageTitle.textContent = "Panel de Proveedor"
     } else if (appState.currentRole === "CLIENT") {
+      console.log("👤 Cargando vistas de cliente...")
       content = await createClientViews()
-      pageTitle.textContent = "Client Dashboard"
+      if (pageTitle) pageTitle.textContent = "Panel de Cliente"
+    }
+
+    if (!content) {
+      throw new Error("No se pudo generar el contenido para el rol: " + appState.currentRole)
     }
 
     // Update content
     contentArea.innerHTML = content
+    console.log("✅ Contenido renderizado exitosamente")
 
     // Setup view-specific event listeners
     setupViewEventListeners()
+
+    // Show first view by default
+    showDefaultView()
   } catch (error) {
-    console.error("Error rendering content:", error)
+    console.error("❌ Error renderizando contenido:", error)
     contentArea.innerHTML = `
-      <div class="error-message">
-        <i class="fas fa-exclamation-circle"></i>
-        <p>Error loading content. Please try again later.</p>
-        <button class="btn btn-primary" onclick="window.location.reload()">Retry</button>
+      <div class="error-message" style="text-align: center; padding: 2rem;">
+        <i class="fas fa-exclamation-circle" style="font-size: 3rem; color: #ef4444; margin-bottom: 1rem;"></i>
+        <h3>Error al cargar el contenido</h3>
+        <p>Detalles: ${error.message}</p>
+        <button class="btn btn-primary" onclick="window.location.reload()">
+          <i class="fas fa-refresh"></i> Recargar página
+        </button>
       </div>
     `
   }
 }
 
+// Show the default view (dashboard)
+function showDefaultView() {
+  console.log("👁️ Mostrando vista por defecto...")
+
+  // Hide all views
+  const views = document.querySelectorAll(".view")
+  views.forEach((view) => {
+    view.classList.add("hidden")
+  })
+
+  // Show dashboard view
+  const dashboardView = document.querySelector(".dashboard-view")
+  if (dashboardView) {
+    dashboardView.classList.remove("hidden")
+    console.log("✅ Vista dashboard mostrada")
+  } else {
+    console.error("❌ No se encontró la vista dashboard")
+  }
+}
+
 // Setup event listeners
 function setupEventListeners() {
+  console.log("🎧 Configurando event listeners...")
+
   // Sidebar toggle
   const sidebarToggle = document.getElementById("sidebarToggle")
   const mobileSidebarToggle = document.getElementById("mobileSidebarToggle")
@@ -202,15 +263,15 @@ function setupEventListeners() {
 
   if (mobileSidebarToggle) {
     mobileSidebarToggle.addEventListener("click", () => {
-      sidebar.classList.toggle("show")
+      sidebar?.classList.toggle("show")
     })
   }
 
-  // Navigation menu
-  const navItems = document.querySelectorAll(".nav-item")
-  navItems.forEach((item) => {
-    item.addEventListener("click", handleNavigation)
-  })
+  // Navigation menu - Use event delegation
+  const navMenu = document.getElementById("navMenu")
+  if (navMenu) {
+    navMenu.addEventListener("click", handleNavigation)
+  }
 
   // Notifications toggle
   const notificationsToggle = document.getElementById("notificationsToggle")
@@ -268,67 +329,55 @@ function setupEventListeners() {
     headerLogoutBtn.addEventListener("click", logout)
   }
 
-  // Add tool modal
-  const addToolModal = document.getElementById("addToolModal")
-  const closeToolModal = document.getElementById("closeToolModal")
-  const cancelToolBtn = document.getElementById("cancelToolBtn")
-  const saveToolBtn = document.getElementById("saveToolBtn")
-
-  // Setup modal event listeners if elements exist
-  if (addToolModal && closeToolModal && cancelToolBtn) {
-    // Close modal functions
-    const closeModal = () => {
-      addToolModal.classList.remove("show")
-    }
-
-    closeToolModal.addEventListener("click", closeModal)
-    cancelToolBtn.addEventListener("click", closeModal)
-
-    // Close modal when clicking outside
-    addToolModal.addEventListener("click", (e) => {
-      if (e.target === addToolModal) {
-        closeModal()
-      }
-    })
-
-    // Save tool
-    if (saveToolBtn) {
-      saveToolBtn.addEventListener("click", handleSaveTool)
-    }
-  }
+  console.log("✅ Event listeners configurados")
 }
 
 // Setup view-specific event listeners
 function setupViewEventListeners() {
+  console.log("🎯 Configurando event listeners específicos de vistas...")
+
   // Add tool buttons
-  const addToolBtns = document.querySelectorAll(".add-tool-btn")
+  const addToolBtns = document.querySelectorAll("[id*='addToolBtn'], .add-tool-btn")
   const addToolModal = document.getElementById("addToolModal")
 
   if (addToolBtns.length > 0 && addToolModal) {
     addToolBtns.forEach((btn) => {
       btn.addEventListener("click", () => {
+        console.log("🔧 Abriendo modal de agregar herramienta")
         addToolModal.classList.add("show")
       })
     })
   }
+
+  // Modal event listeners
+  setupModalEvents()
 }
 
 // Handle navigation item click
 function handleNavigation(e) {
+  // Find the nav-item element
+  const navItem = e.target.closest(".nav-item")
+  if (!navItem) return
+
   e.preventDefault()
 
-  const viewName = e.currentTarget.dataset.view
+  const viewName = navItem.dataset.view
   if (!viewName) return
+
+  console.log("🧭 Navegando a vista:", viewName)
 
   // Update active nav item
   document.querySelectorAll(".nav-item").forEach((item) => {
     item.classList.remove("active")
   })
-  e.currentTarget.classList.add("active")
+  navItem.classList.add("active")
 
   // Update page title
   const pageTitle = document.getElementById("pageTitle")
-  pageTitle.textContent = e.currentTarget.querySelector(".nav-item-text").textContent
+  const navText = navItem.querySelector(".nav-item-text")?.textContent
+  if (pageTitle && navText) {
+    pageTitle.textContent = navText
+  }
 
   // Show the selected view
   const views = document.querySelectorAll(".view")
@@ -336,31 +385,68 @@ function handleNavigation(e) {
     view.classList.add("hidden")
   })
 
-  const selectedView = document.querySelector(`.${viewName}-view`)
+  // Try different view selector patterns
+  const possibleSelectors = [
+    `.${viewName}-view`,
+    `.${appState.currentRole.toLowerCase()}-${viewName}-view`,
+    `[data-view="${viewName}"]`,
+  ]
+
+  let selectedView = null
+  for (const selector of possibleSelectors) {
+    selectedView = document.querySelector(selector)
+    if (selectedView) break
+  }
+
   if (selectedView) {
     selectedView.classList.remove("hidden")
+    console.log("✅ Vista mostrada:", viewName)
+  } else {
+    console.error("❌ No se encontró la vista:", viewName)
+    console.log("🔍 Selectores intentados:", possibleSelectors)
   }
 
   // Close mobile sidebar if open
   const sidebar = document.querySelector(".sidebar")
-  if (sidebar.classList.contains("show")) {
+  if (sidebar?.classList.contains("show")) {
     sidebar.classList.remove("show")
   }
 }
 
-// Toggle sidebar
-function toggleSidebar() {
-  const sidebar = document.querySelector(".sidebar")
-  sidebar.classList.toggle("collapsed")
-  appState.sidebarCollapsed = !appState.sidebarCollapsed
+// Setup modal events
+function setupModalEvents() {
+  const addToolModal = document.getElementById("addToolModal")
+  const closeToolModal = document.getElementById("closeToolModal")
+  const cancelToolBtn = document.getElementById("cancelToolBtn")
+  const saveToolBtn = document.getElementById("saveToolBtn")
+
+  if (addToolModal && closeToolModal && cancelToolBtn) {
+    const closeModal = () => {
+      addToolModal.classList.remove("show")
+    }
+
+    closeToolModal.addEventListener("click", closeModal)
+    cancelToolBtn.addEventListener("click", closeModal)
+
+    addToolModal.addEventListener("click", (e) => {
+      if (e.target === addToolModal) {
+        closeModal()
+      }
+    })
+
+    if (saveToolBtn) {
+      saveToolBtn.addEventListener("click", handleSaveTool)
+    }
+  }
 }
 
 // Handle save tool
 async function handleSaveTool() {
+  console.log("💾 Guardando herramienta...")
+
   const form = document.getElementById("addToolForm")
   if (!form) return
 
-  // Get form data
   const formData = new FormData(form)
   const toolData = {
     name: formData.get("name"),
@@ -374,50 +460,42 @@ async function handleSaveTool() {
     active: true,
   }
 
-  // Validate data
-  if (
-    !toolData.name ||
-    !toolData.description ||
-    !toolData.brand ||
-    !toolData.model ||
-    !toolData.categoryId ||
-    isNaN(toolData.costPerDay) ||
-    isNaN(toolData.availableQuantity)
-  ) {
-    alert("Please fill in all required fields")
+  if (!toolData.name || !toolData.description || !toolData.brand || !toolData.model) {
+    showError("Por favor completa todos los campos requeridos")
     return
   }
 
   try {
-    // Show loading state
     const saveBtn = document.getElementById("saveToolBtn")
     saveBtn.disabled = true
-    saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...'
+    saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...'
 
-    // Save tool
     const savedTool = await apiService.createTool(toolData)
+    console.log("✅ Herramienta guardada:", savedTool)
 
-    // Close modal
     document.getElementById("addToolModal").classList.remove("show")
-
-    // Refresh content
     await renderContent()
-
-    // Show success message
-    alert("Tool added successfully!")
+    showSuccess("¡Herramienta agregada exitosamente!")
   } catch (error) {
-    console.error("Error saving tool:", error)
-    alert("Error saving tool. Please try again.")
+    console.error("❌ Error guardando herramienta:", error)
+    showError("Error al guardar la herramienta: " + error.message)
   } finally {
-    // Reset button state
     const saveBtn = document.getElementById("saveToolBtn")
     saveBtn.disabled = false
-    saveBtn.innerHTML = "Save Tool"
+    saveBtn.innerHTML = "Guardar Herramienta"
   }
+}
+
+// Toggle sidebar
+function toggleSidebar() {
+  const sidebar = document.querySelector(".sidebar")
+  sidebar?.classList.toggle("collapsed")
+  appState.sidebarCollapsed = !appState.sidebarCollapsed
 }
 
 // Logout function
 function logout() {
+  console.log("👋 Cerrando sesión...")
   localStorage.removeItem("authToken")
   localStorage.removeItem("userRole")
   localStorage.removeItem("isAuthenticated")
@@ -433,6 +511,20 @@ function getInitials(name) {
     .join("")
     .toUpperCase()
     .substring(0, 2)
+}
+
+// Show error message
+function showError(message) {
+  console.error("❌", message)
+  // You can implement a toast notification here
+  alert("Error: " + message)
+}
+
+// Show success message
+function showSuccess(message) {
+  console.log("✅", message)
+  // You can implement a toast notification here
+  alert("Éxito: " + message)
 }
 
 // Initialize app when DOM is loaded
